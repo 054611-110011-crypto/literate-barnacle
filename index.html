@@ -53,7 +53,14 @@
         input.value = '';
         renderChatMessages();
     }
-    document.addEventListener('DOMContentLoaded', renderChatMessages);
+    document.addEventListener('DOMContentLoaded', function() {
+        renderChatMessages();
+        // 自動隱藏開機畫面，顯示主畫面
+        setTimeout(function() {
+            var boot = document.getElementById('boot-screen');
+            if (boot) boot.style.display = 'none';
+        }, 1500);
+    });
     </script>
 <!DOCTYPE html>
 <html lang="zh-TW">
