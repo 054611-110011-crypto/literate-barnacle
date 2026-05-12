@@ -1,60 +1,3 @@
-                <hr class="my-2 w-full border-gray-700">
-                <div class="w-full">
-                    <div class="font-bold mb-1">4. Fuldiss.minecraft 伺服器資訊</div>
-                    <div class="mb-1">伺服器名稱：<span class="font-mono">Fuldiss.minecraft</span></div>
-                    <div class="mb-1">伺服器位址：<span id="mc-server-ip" class="font-mono">fuldiss.minecraft</span>
-                        <button onclick="navigator.clipboard.writeText('fuldiss.minecraft');this.textContent='已複製';setTimeout(()=>this.textContent='複製IP',1000);" class="ml-2 px-2 py-0.5 bg-blue-700 hover:bg-blue-800 text-white text-xs rounded">複製IP</button>
-                    </div>
-                    <div class="mb-1">支援版本：<span class="font-mono">1.20.6</span>（建議使用最新 Java 版）</div>
-                    <div class="text-xs text-gray-400 mt-1">請於 Minecraft Java 啟動後，選擇「多人遊戲」→「新增伺服器」→ 輸入上方位址即可加入。</div>
-                </div>
-    <div class="desktop-icon top-228 left-6" onclick="openWindow('win-chat')">
-        <div class="icon-emoji">💬</div>
-        <div class="label">聊天訊息</div>
-    </div>
-        <div class="start-menu-item" onclick="openWindow('win-chat')">
-            <div class="icon">💬</div>
-            <div>聊天訊息</div>
-        </div>
-    <!-- 💬 聊天訊息視窗（本地假聊天室） -->
-    <div id="win-chat" class="window w-[400px] h-[500px]" style="top: 180px; left: 360px; z-index: 150; display: none;">
-        <div class="window-header">
-            <div class="flex gap-2">
-                <div class="dot bg-red-500/50" onclick="closeWindow('win-chat')"></div>
-                <div class="dot bg-yellow-500/50" onclick="minimizeWindow('win-chat')"></div>
-                <div class="dot bg-green-500/50" onclick="maximizeWindow('win-chat')"></div>
-            </div>
-            <span class="text-[9px] font-bold opacity-40 tracking-widest uppercase">聊天訊息</span>
-        </div>
-        <div class="window-content" style="display:flex;flex-direction:column;height:100%;padding:0;">
-            <div id="chat-messages" style="flex:1;overflow-y:auto;padding:16px 12px 8px 12px;background:rgba(0,0,0,0.15);"></div>
-            <div style="display:flex;padding:8px 12px 12px 12px;gap:8px;">
-                <input id="chat-input" type="text" class="flex-1 px-2 py-1 rounded bg-gray-800 text-white border border-gray-600" placeholder="輸入訊息..." onkeydown="if(event.key==='Enter'){sendChatMessage();}">
-                <button onclick="sendChatMessage()" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded">送出</button>
-            </div>
-        </div>
-        <div class="resize-handle"></div>
-    </div>
-    <script>
-    // 聊天訊息功能
-    let chatMessages = JSON.parse(localStorage.getItem('gemini_chat_messages') || '[]');
-    function renderChatMessages() {
-        const box = document.getElementById('chat-messages');
-        if (!box) return;
-        box.innerHTML = chatMessages.map(m => `<div style='margin-bottom:10px;'><span style='color:#3b82f6;font-weight:bold;'>你：</span> <span>${m}</span></div>`).join('');
-        box.scrollTop = box.scrollHeight;
-    }
-    function sendChatMessage() {
-        const input = document.getElementById('chat-input');
-        const msg = input.value.trim();
-        if (!msg) return;
-        chatMessages.push(msg);
-        localStorage.setItem('gemini_chat_messages', JSON.stringify(chatMessages));
-        input.value = '';
-        renderChatMessages();
-    }
-    document.addEventListener('DOMContentLoaded', renderChatMessages);
-    </script>
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -173,7 +116,8 @@
         .taskbar {
             position: fixed; bottom: 0; left: 0; right: 0; height: 48px;
             background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(20px);
-            display: flex; align-items: center; padding: 0 15px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 0 15px;
             border-top: 1px solid rgba(255,255,255,0.05);
             z-index: 10000;
         }
@@ -237,7 +181,48 @@
             <button onclick="replayBoot()" class="text-[10px] opacity-40 uppercase tracking-widest hover:opacity-100 transition">Replay</button>
             <button onclick="shutdown()" class="text-[10px] opacity-40 uppercase tracking-widest hover:opacity-100 transition">Shutdown</button>
         </div>
+
+    <div class="desktop-icon top-228 left-6" onclick="openWindow('win-chat')">
+        <div class="icon-emoji">💬</div>
+        <div class="label">聊天訊息</div>
     </div>
+
+    <div id="win-chat" class="window w-[400px] h-[500px]" style="top: 180px; left: 360px; z-index: 150; display: none;">
+        <div class="window-header">
+            <div class="flex gap-2">
+                <div class="dot bg-red-500/50" onclick="closeWindow('win-chat')"></div>
+                <div class="dot bg-yellow-500/50" onclick="minimizeWindow('win-chat')"></div>
+                <div class="dot bg-green-500/50" onclick="maximizeWindow('win-chat')"></div>
+            </div>
+            <span class="text-[9px] font-bold opacity-40 tracking-widest uppercase">聊天訊息</span>
+        </div>
+        <div class="window-content" style="display:flex;flex-direction:column;height:100%;padding:0;">
+            <div id="chat-messages" style="flex:1;overflow-y:auto;padding:16px 12px 8px 12px;background:rgba(0,0,0,0.15);"></div>
+            <div style="display:flex;padding:8px 12px 12px 12px;gap:8px;">
+                <input id="chat-input" type="text" class="flex-1 px-2 py-1 rounded bg-gray-800 text-white border border-gray-600" placeholder="輸入訊息..." onkeydown="if(event.key==='Enter'){sendChatMessage();}">
+                <button onclick="sendChatMessage()" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded">送出</button>
+            </div>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+    <script>
+    // 聊天訊息功能
+    let chatMessages = JSON.parse(localStorage.getItem('gemini_chat_messages') || '[]');
+    function renderChatMessages() {
+        const box = document.getElementById('chat-messages');
+        if (!box) return;
+        box.innerHTML = chatMessages.map(m => `<div style='margin-bottom:10px;'><span style='color:#3b82f6;font-weight:bold;'>${m.author}：</span> <span>${m.message}</span></div>`).join('');
+        box.scrollTop = box.scrollHeight;
+    }
+    async function sendChatMessage() {
+        const input = document.getElementById('chat-input');
+        const msg = input.value.trim();
+        if (!msg) return;
+        input.value = '';
+        await postChatMessage(msg);
+    }
+    document.addEventListener('DOMContentLoaded', loadChatMessages);
+    </script>
 
     <!-- 開機畫面 -->
     <div id="boot-screen" class="boot-screen">
@@ -309,12 +294,11 @@
     </div>
     <div class="desktop-icon top-180 left-6" onclick="openWindow('win-appstore')">
         <div class="icon-emoji">🛒</div>
-        <div class="label">Play Store</div>
+        <div class="label">Microsoft Store</div>
     </div>
-
-    <div class="desktop-icon top-180 left-6" onclick="openWindow('win-appstore')">
-        <div class="icon-emoji">🛒</div>
-        <div class="label">Play Store</div>
+    <div class="desktop-icon top-228 left-6" onclick="openWindow('win-widgets')">
+        <div class="icon-emoji">🧩</div>
+        <div class="label">Widgets</div>
     </div>
 
     <!-- 任務欄 -->
@@ -345,13 +329,21 @@
             <div class="icon">📝</div>
             <div>VS Code Web</div>
         </div>
+        <div class="start-menu-item" onclick="openWindow('win-widgets')">
+            <div class="icon">🧩</div>
+            <div>Widgets</div>
+        </div>
+        <div class="start-menu-item" onclick="openWindow('win-chat')">
+            <div class="icon">💬</div>
+            <div>聊天訊息</div>
+        </div>
         <div class="start-menu-item" onclick="openWindow('win-mc-launcher')">
             <div class="icon">⛏️</div>
             <div>MC Java 啟動器</div>
         </div>
         <div class="start-menu-item" onclick="openWindow('win-appstore')">
             <div class="icon">🛒</div>
-            <div>Play Store</div>
+            <div>Microsoft Store</div>
         </div>
                 <!-- ⛏️ Minecraft Java 啟動器視窗（僅前端 UI 展示） -->
                 <div id="win-mc-launcher" class="window w-[500px] h-[400px]" style="top: 160px; left: 320px; z-index: 140; display: none;">
@@ -395,7 +387,7 @@
                     </div>
                     <div class="resize-handle"></div>
                 </div>
-            <!-- Play Store / App Store -->
+            <!-- Microsoft Store / App Store -->
             <div id="win-appstore" class="window w-[600px] h-[500px]" style="top: 180px; left: 300px; z-index: 130; display: none;">
                 <div class="window-header">
                     <div class="flex gap-2">
@@ -403,14 +395,14 @@
                         <div class="dot bg-yellow-500/50" onclick="minimizeWindow('win-appstore')"></div>
                         <div class="dot bg-green-500/50" onclick="maximizeWindow('win-appstore')"></div>
                     </div>
-                    <span class="text-[9px] font-bold opacity-40 tracking-widest uppercase">Play Store</span>
+                    <span class="text-[9px] font-bold opacity-40 tracking-widest uppercase">Microsoft Store</span>
                 </div>
                 <div class="window-content" style="overflow-y:auto;">
                     <div style="padding: 20px;">
-                        <h3 style="margin-bottom: 15px;">App Store (Play Store)</h3>
+                        <h3 style="margin-bottom: 15px;">Microsoft Store</h3>
                         <div id="appstore-list"></div>
                         <hr style="margin: 20px 0;">
-                        <h4>自訂安裝</h4>
+                        <h4>安裝自訂 Web 應用</h4>
                         <input id="custom-app-name" type="text" placeholder="App 名稱" style="padding:4px; margin-right:4px;">
                         <input id="custom-app-url" type="text" placeholder="App 網址 (https://...)" style="padding:4px; margin-right:4px; width:220px;">
                         <button onclick="installCustomApp()" style="padding:4px 12px; background:#3b82f6; color:#fff; border:none; border-radius:4px;">安裝</button>
@@ -419,162 +411,42 @@
                 </div>
                 <div class="resize-handle"></div>
             </div>
-            <script>
-            // App Store 內建 app 資料
-            const appStoreApps = [
-                { id: 'calc', name: '計算機', icon: '🧮', url: 'https://www.desmos.com/scientific', desc: '科學計算機' },
-                { id: 'notepad', name: '記事本', icon: '📝', url: 'https://anotepad.com/', desc: '雲端記事本' },
-                { id: 'weather', name: '天氣', icon: '🌦️', url: 'https://www.msn.com/zh-tw/weather', desc: '即時天氣查詢' },
-                { id: 'todo', name: '待辦清單', icon: '✅', url: 'https://todo.microsoft.com/', desc: '微軟 To Do' },
-                { id: 'github', name: 'GitHub', icon: '🐱', url: 'https://github.com/', desc: '程式社群平台' },
-                { id: 'yt', name: 'YouTube', icon: '📺', url: 'https://www.youtube.com/', desc: '影音平台' }
-            ];
-
-            // 已安裝 app 狀態（localStorage 可擴充）
-            let userApps = JSON.parse(localStorage.getItem('gemini_user_apps') || '[]');
-
-            function saveUserApps() {
-                localStorage.setItem('gemini_user_apps', JSON.stringify(userApps));
-            }
-
-            function renderAppStore() {
-                const list = document.getElementById('appstore-list');
-                if (!list) return;
-                list.innerHTML = '';
-                appStoreApps.forEach(app => {
-                    const installed = userApps.find(a => a.id === app.id);
-                    const div = document.createElement('div');
-                    div.style.cssText = 'display:flex;align-items:center;gap:12px;margin-bottom:10px;';
-                    div.innerHTML = `
-                        <span style="font-size:28px;">${app.icon}</span>
-                        <span style="flex:1;">${app.name}<br><span style='font-size:12px;opacity:0.7;'>${app.desc}</span></span>
-                        <button onclick="${installed ? `openWindow('app-${app.id}')` : `installApp('${app.id}')`}" style="padding:4px 12px;background:${installed ? '#22c55e' : '#3b82f6'};color:#fff;border:none;border-radius:4px;">${installed ? '開啟' : '安裝'}</button>
-                        ${installed ? `<button onclick="uninstallApp('${app.id}')" style='padding:4px 8px;background:#ef4444;color:#fff;border:none;border-radius:4px;margin-left:4px;'>移除</button>` : ''}
-                    `;
-                    list.appendChild(div);
-                });
-            }
-
-            function installApp(id) {
-                const app = appStoreApps.find(a => a.id === id);
-                if (!app) return;
-                userApps.push(app);
-                saveUserApps();
-                createAppWindow(app);
-                renderAppStore();
-                updateDesktopAndMenu();
-            }
-
-            function uninstallApp(id) {
-                userApps = userApps.filter(a => a.id !== id);
-                saveUserApps();
-                const win = document.getElementById('app-' + id);
-                if (win) win.remove();
-                renderAppStore();
-                updateDesktopAndMenu();
-            }
-
-            function installCustomApp() {
-                const name = document.getElementById('custom-app-name').value.trim();
-                const url = document.getElementById('custom-app-url').value.trim();
-                if (!name || !url) return;
-                const id = 'custom_' + Date.now();
-                const app = { id, name, icon: '🌐', url, desc: '自訂 App' };
-                userApps.push(app);
-                saveUserApps();
-                createAppWindow(app);
-                renderAppStore();
-                updateDesktopAndMenu();
-                document.getElementById('custom-app-msg').textContent = '安裝成功！';
-                setTimeout(()=>{document.getElementById('custom-app-msg').textContent='';},2000);
-            }
-
-            function createAppWindow(app) {
-                if (document.getElementById('app-' + app.id)) return;
-                const win = document.createElement('div');
-                win.id = 'app-' + app.id;
-                win.className = 'window w-[700px] h-[500px]';
-                win.style = 'top: 220px; left: 320px; z-index: 150; display: none;';
-                win.innerHTML = `
-                    <div class="window-header">
-                        <div class="flex gap-2">
-                            <div class="dot bg-red-500/50" onclick="closeWindow('app-${app.id}')"></div>
-                            <div class="dot bg-yellow-500/50" onclick="minimizeWindow('app-${app.id}')"></div>
-                            <div class="dot bg-green-500/50" onclick="maximizeWindow('app-${app.id}')"></div>
-                        </div>
-                        <span class="text-[9px] font-bold opacity-40 tracking-widest uppercase">${app.name}</span>
-                    </div>
-                    <div class="window-content">
-                        <div class="interaction-overlay"></div>
-                        <iframe width="100%" height="100%" src="${app.url}" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                    <div class="resize-handle"></div>
-                `;
-                document.body.appendChild(win);
-            }
-
-            function updateDesktopAndMenu() {
-                // 桌面
-                let base = document.querySelector('.desktop-icon.top-180.left-6');
-                if (!base) return;
-                // 移除舊的
-                document.querySelectorAll('.desktop-icon.user-app').forEach(e=>e.remove());
-                // 新增
-                userApps.forEach((app,i) => {
-                    const icon = document.createElement('div');
-                    icon.className = `desktop-icon user-app`;
-                    icon.style = `top: ${210 + i*24}px; left: 6px; position: absolute;`;
-                    icon.onclick = ()=>openWindow('app-'+app.id);
-                    icon.innerHTML = `<div class='icon-emoji'>${app.icon}</div><div class='label'>${app.name}</div>`;
-                    document.body.appendChild(icon);
-                });
-                // 開始選單
-                const menu = document.getElementById('start-menu');
-                if (!menu) return;
-                document.querySelectorAll('.start-menu-item.user-app').forEach(e=>e.remove());
-                userApps.forEach(app => {
-                    const item = document.createElement('div');
-                    item.className = 'start-menu-item user-app';
-                    item.onclick = ()=>openWindow('app-'+app.id);
-                    item.innerHTML = `<div class='icon'>${app.icon}</div><div>${app.name}</div>`;
-                    menu.insertBefore(item, menu.lastElementChild);
-                });
-            }
-
-            // 初始化 App Store
-            document.addEventListener('DOMContentLoaded', () => {
-                renderAppStore();
-                userApps.forEach(createAppWindow);
-                updateDesktopAndMenu();
-            });
-            </script>
-        <div class="start-menu-item" onclick="openWindow('win-appstore')">
-            <div class="icon">🛒</div>
-            <div>Play Store</div>
-        </div>
-            <!-- Play Store / App Store 視窗 -->
-            <div id="win-appstore" class="window w-[600px] h-[500px]" style="top: 180px; left: 300px; z-index: 130; display: none;">
+            <div id="win-widgets" class="window w-[520px] h-[500px]" style="top: 160px; left: 360px; z-index: 135; display: none;">
                 <div class="window-header">
                     <div class="flex gap-2">
-                        <div class="dot bg-red-500/50" onclick="closeWindow('win-appstore')"></div>
-                        <div class="dot bg-yellow-500/50" onclick="minimizeWindow('win-appstore')"></div>
-                        <div class="dot bg-green-500/50" onclick="maximizeWindow('win-appstore')"></div>
+                        <div class="dot bg-red-500/50" onclick="closeWindow('win-widgets')"></div>
+                        <div class="dot bg-yellow-500/50" onclick="minimizeWindow('win-widgets')"></div>
+                        <div class="dot bg-green-500/50" onclick="maximizeWindow('win-widgets')"></div>
                     </div>
-                    <span class="text-[9px] font-bold opacity-40 tracking-widest uppercase">Play Store</span>
+                    <span class="text-[9px] font-bold opacity-40 tracking-widest uppercase">Widgets</span>
                 </div>
-                <div class="window-content" style="overflow-y:auto;">
-                    <div style="padding: 20px;">
-                        <h3 style="font-size: 20px; margin-bottom: 15px;">App Store / Play Store</h3>
-                        <div id="appstore-list"></div>
-                        <hr style="margin: 20px 0;">
-                        <h4>安裝自訂 Web App</h4>
-                        <input id="custom-app-name" type="text" placeholder="App 名稱" style="padding: 4px; margin-right: 8px;">
-                        <input id="custom-app-url" type="text" placeholder="App 網址 (https://...)" style="padding: 4px; margin-right: 8px; width: 220px;">
-                        <button onclick="installCustomApp()" style="padding: 4px 12px; background: #3b82f6; color: #fff; border: none; border-radius: 4px;">安裝</button>
+                <div class="window-content" style="overflow-y:auto; padding: 20px;">
+                    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;">
+                        <div style="background:rgba(255,255,255,0.08);padding:16px;border-radius:16px;backdrop-filter:blur(10px);">
+                            <div style="font-size:14px;color:#7c8bff;margin-bottom:8px;">Weather</div>
+                            <div style="font-size:28px;font-weight:700;">24°C</div>
+                            <div style="opacity:.7;margin-top:8px;">Taipei · Sunny</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.08);padding:16px;border-radius:16px;backdrop-filter:blur(10px);">
+                            <div style="font-size:14px;color:#34d399;margin-bottom:8px;">News</div>
+                            <div style="font-size:16px;font-weight:700;">GeminiOS 11 arrives with smarter widgets.</div>
+                            <div style="opacity:.7;margin-top:8px;">Discover the latest updates now.</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.08);padding:16px;border-radius:16px;backdrop-filter:blur(10px);">
+                            <div style="font-size:14px;color:#fb7185;margin-bottom:8px;">Calendar</div>
+                            <div style="font-size:20px;font-weight:700;">Fri, May 23</div>
+                            <div style="opacity:.7;margin-top:8px;">Next: Team sync at 14:00</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.08);padding:16px;border-radius:16px;backdrop-filter:blur(10px);">
+                            <div style="font-size:14px;color:#38bdf8;margin-bottom:8px;">Xbox Game Pass</div>
+                            <div style="font-size:20px;font-weight:700;">Cloud gaming ready</div>
+                            <div style="opacity:.7;margin-top:8px;">Play blockbuster games instantly.</div>
+                        </div>
                     </div>
                 </div>
                 <div class="resize-handle"></div>
             </div>
+            <!-- Microsoft Store / App Store -->
         <div class="start-menu-item" onclick="shutdown()">
             <div class="icon">🔌</div>
             <div>Shutdown</div>
@@ -720,23 +592,76 @@
 
     <script>
         let highestZ = 1000;
-
-        // App Store 內建 app 資料
-        const appStoreApps = [
-            { id: 'calc', name: '計算機', icon: '🧮', url: 'https://www.desmos.com/scientific', desc: '科學計算機' },
-            { id: 'notepad', name: '記事本', icon: '📝', url: 'https://anotepad.com/', desc: '雲端記事本' },
-            { id: 'weather', name: '天氣', icon: '🌦️', url: 'https://www.accuweather.com/', desc: '即時天氣查詢' },
-            { id: 'todo', name: '待辦清單', icon: '✅', url: 'https://todo.microsoft.com/', desc: '微軟 To Do' },
-            { id: 'maps', name: 'Google 地圖', icon: '🌍', url: 'https://www.google.com/maps', desc: '地圖服務' },
-            { id: 'yt', name: 'YouTube', icon: '📺', url: 'https://www.youtube.com/', desc: '影音平台' },
-            { id: 'vscode', name: 'VS Code Web', icon: '📝', url: 'https://vscode.dev/', desc: '線上程式編輯器' }
-        ];
-
-        // 已安裝 app 狀態（localStorage）
+        let appStoreApps = [];
         let userApps = JSON.parse(localStorage.getItem('gemini_user_apps') || '[]');
+        let chatMessages = [];
+        let fileListData = [];
 
         function saveUserApps() {
             localStorage.setItem('gemini_user_apps', JSON.stringify(userApps));
+        }
+
+        async function loadAppStoreApps() {
+            try {
+                const response = await fetch('/api/apps');
+                if (!response.ok) throw new Error('Failed to fetch apps');
+                appStoreApps = await response.json();
+            } catch (error) {
+                console.warn('App store API error:', error);
+            }
+            renderAppStore();
+        }
+
+        async function loadChatMessages() {
+            try {
+                const response = await fetch('/api/chat');
+                if (!response.ok) throw new Error('Failed to fetch chat');
+                chatMessages = await response.json();
+            } catch (error) {
+                console.warn('Chat API error:', error);
+                chatMessages = JSON.parse(localStorage.getItem('gemini_chat_messages') || '[]');
+            }
+            renderChatMessages();
+        }
+
+        async function postChatMessage(message) {
+            const payload = { author: '你', message };
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) throw new Error('Failed to save chat');
+                const saved = await response.json();
+                chatMessages.push(saved);
+                localStorage.setItem('gemini_chat_messages', JSON.stringify(chatMessages));
+            } catch (error) {
+                console.warn('Chat save error:', error);
+                chatMessages.push({ id: Date.now(), author: '你', message, timestamp: new Date().toISOString() });
+                localStorage.setItem('gemini_chat_messages', JSON.stringify(chatMessages));
+            }
+            renderChatMessages();
+        }
+
+        async function loadFileList() {
+            try {
+                const response = await fetch('/api/files');
+                if (!response.ok) throw new Error('Failed to fetch files');
+                fileListData = await response.json();
+            } catch (error) {
+                console.warn('File API error:', error);
+                fileListData = [
+                    { name: 'Documents', type: 'folder', icon: '📁' },
+                    { name: 'Downloads', type: 'folder', icon: '📁' },
+                    { name: 'Pictures', type: 'folder', icon: '🖼️' },
+                    { name: 'Music', type: 'folder', icon: '🎵' },
+                    { name: 'Videos', type: 'folder', icon: '🎬' },
+                    { name: 'readme.txt', type: 'file', icon: '📄' },
+                    { name: 'config.json', type: 'file', icon: '⚙️' }
+                ];
+            }
+            populateFileList();
         }
 
         // 顯示 App Store 內容
@@ -849,7 +774,7 @@
 
         // 初始化 App Store
         document.addEventListener('DOMContentLoaded', () => {
-            renderAppStore();
+            loadAppStoreApps();
             renderUserApps();
         });
 
@@ -1102,7 +1027,12 @@
                 'win-browser': '🌐',
                 'win-terminal': '💻',
                 'win-files': '📁',
-                'win-settings': '⚙️'
+                'win-settings': '⚙️',
+                'win-chat': '💬',
+                'win-appstore': '🛒',
+                'win-widgets': '🧩',
+                'win-vscode': '📝',
+                'win-mc-launcher': '⛏️'
             };
             return icons[id] || '🖼️';
         }

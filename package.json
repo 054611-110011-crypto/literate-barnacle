@@ -1,0 +1,12 @@
+{
+  "name": "literate-barnacle",
+  "version": "1.0.0",
+  "description": "GeminiOS-style frontend with a simple Node.js backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

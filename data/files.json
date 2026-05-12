@@ -1,0 +1,9 @@
+[
+  { "name": "Documents", "type": "folder", "icon": "📁" },
+  { "name": "Downloads", "type": "folder", "icon": "📁" },
+  { "name": "Pictures", "type": "folder", "icon": "🖼️" },
+  { "name": "Music", "type": "folder", "icon": "🎵" },
+  { "name": "Videos", "type": "folder", "icon": "🎬" },
+  { "name": "readme.txt", "type": "file", "icon": "📄" },
+  { "name": "config.json", "type": "file", "icon": "⚙️" }
+]

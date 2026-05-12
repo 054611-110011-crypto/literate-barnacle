@@ -1,0 +1,9 @@
+[
+  { "id": "calc", "name": "計算機", "icon": "🧮", "url": "https://www.desmos.com/scientific", "desc": "科學計算機" },
+  { "id": "notepad", "name": "記事本", "icon": "📝", "url": "https://anotepad.com/", "desc": "雲端記事本" },
+  { "id": "weather", "name": "天氣", "icon": "🌦️", "url": "https://www.accuweather.com/", "desc": "即時天氣查詢" },
+  { "id": "todo", "name": "待辦清單", "icon": "✅", "url": "https://todo.microsoft.com/", "desc": "微軟 To Do" },
+  { "id": "teams", "name": "Microsoft Teams", "icon": "💬", "url": "https://teams.microsoft.com/", "desc": "團隊協作" },
+  { "id": "edge", "name": "Microsoft Edge", "icon": "🌐", "url": "https://www.microsoft.com/edge", "desc": "快速瀏覽器" },
+  { "id": "xbox", "name": "Xbox Game Pass", "icon": "🎮", "url": "https://www.xbox.com/", "desc": "遊戲訂閱服務" }
+]
