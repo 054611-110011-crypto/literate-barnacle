@@ -72,36 +72,7 @@
         .icon:hover { background: rgba(255,255,255,0.1); }
 
         /* 開機畫面 */
-        .boot-screen {
-            position: fixed; inset: 0; background: #000; z-index: 10000;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: #fff; font-family: 'Space Grotesk', monospace;
-        }
-        .boot-logo { font-size: 48px; margin-bottom: 20px; }
-        .boot-progress { width: 300px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden; }
-        .boot-progress-bar { height: 100%; background: #3b82f6; width: 0%; transition: width 0.1s; }
-        .boot-text { margin-top: 20px; font-size: 14px; opacity: 0.7; }
 
-        /* 關機畫面 */
-        .shutdown-screen {
-            position: fixed; inset: 0; background: #000; z-index: 10000;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: #fff; font-family: 'Space Grotesk', monospace;
-        }
-        .shutdown-text { font-size: 24px; margin-bottom: 20px; }
-        .shutdown-progress { width: 200px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden; }
-        .shutdown-progress-bar { height: 100%; background: #ef4444; width: 0%; transition: width 0.1s; }
-
-        /* 藍屏 */
-        .bsod-screen {
-            position: fixed; inset: 0; background: #0078d4; z-index: 10000;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: #fff; font-family: 'Space Grotesk', monospace; padding: 40px;
-            text-align: center;
-        }
-        .bsod-title { font-size: 36px; margin-bottom: 20px; }
-        .bsod-error { font-size: 18px; margin-bottom: 20px; }
-        .bsod-details { font-size: 14px; opacity: 0.8; line-height: 1.5; }
 
         /* 最小化視窗 */
         .minimized { display: none !important; }
@@ -177,9 +148,6 @@
         <div class="font-black italic text-blue-400">GEMINI OS 1.0</div>
         <div class="ml-auto flex gap-4 items-center">
             <div id="clock" class="clock">00:00</div>
-            <button onclick="triggerBSOD()" class="text-[10px] opacity-40 uppercase tracking-widest hover:opacity-100 transition">BSOD</button>
-            <button onclick="replayBoot()" class="text-[10px] opacity-40 uppercase tracking-widest hover:opacity-100 transition">Replay</button>
-            <button onclick="shutdown()" class="text-[10px] opacity-40 uppercase tracking-widest hover:opacity-100 transition">Shutdown</button>
         </div>
 
     <div class="desktop-icon top-228 left-6" onclick="openWindow('win-chat')">
@@ -223,34 +191,6 @@
     }
     document.addEventListener('DOMContentLoaded', loadChatMessages);
     </script>
-
-    <!-- 開機畫面 -->
-    <div id="boot-screen" class="boot-screen">
-        <div class="boot-logo">🚀 GEMINI OS</div>
-        <div class="boot-progress">
-            <div id="boot-progress-bar" class="boot-progress-bar"></div>
-        </div>
-        <div id="boot-text" class="boot-text">Initializing Neural Engine...</div>
-    </div>
-
-    <!-- 關機畫面 -->
-    <div id="shutdown-screen" class="shutdown-screen" style="display: none;">
-        <div class="shutdown-text">Shutting down Gemini OS...</div>
-        <div class="shutdown-progress">
-            <div id="shutdown-progress-bar" class="shutdown-progress-bar"></div>
-        </div>
-    </div>
-
-    <!-- 藍屏 -->
-    <div id="bsod-screen" class="bsod-screen" style="display: none;">
-        <div class="bsod-title">:-(</div>
-        <div class="bsod-error">Your PC ran into a problem and needs to restart.</div>
-        <div class="bsod-details">
-            We're just collecting some error info, and then we'll restart for you.<br>
-            Error Code: NEURAL_OVERLOAD_404<br>
-            If you'd like to know more, you can search online later for this error: NEURAL_OVERLOAD_404
-        </div>
-    </div>
 
     <!-- 桌面圖示 -->
     <div class="desktop-icon top-12 left-6" onclick="openWindow('win-earth')">
@@ -366,8 +306,8 @@
                                 <option value="1.16.5">1.16.5</option>
                             </select>
                         </label>
-                        <button onclick="alert('僅前端展示，無法啟動本地 Minecraft。')" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded">啟動遊戲</button>
-                        <div class="text-xs text-gray-400 mt-2">* 這是純前端展示，無法直接啟動本地 Minecraft Java 遊戲。</div>
+                        <button onclick="launchMinecraft()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded">啟動遊戲</button>
+                        <div id="mc-status" class="text-xs text-yellow-300 mt-2">* 這是純前端展示，無法直接啟動本地 Minecraft Java 遊戲。</div>
                         <hr class="my-2 w-full border-gray-700">
                         <div class="w-full">
                             <div class="font-bold mb-1">1. 官方 Web 版 Minecraft（僅支援 Classic 版）</div>
@@ -447,10 +387,6 @@
                 <div class="resize-handle"></div>
             </div>
             <!-- Microsoft Store / App Store -->
-        <div class="start-menu-item" onclick="shutdown()">
-            <div class="icon">🔌</div>
-            <div>Shutdown</div>
-        </div>
         <!-- VS Code Web 內建應用 -->
         <div id="win-vscode" class="window w-[900px] h-[600px]" style="top: 120px; left: 180px; z-index: 120; display: none;">
             <div class="window-header">
@@ -897,80 +833,8 @@
             }
         }
 
-        // 開機動畫
-        function startBoot() {
-            const bootScreen = document.getElementById('boot-screen');
-            const progressBar = document.getElementById('boot-progress-bar');
-            const bootText = document.getElementById('boot-text');
-            let progress = 0;
-            const messages = [
-                'Initializing Neural Engine...',
-                'Loading Core Systems...',
-                'Connecting to Gemini Network...',
-                'Calibrating Window Manager...',
-                'System Ready!'
-            ];
-            let messageIndex = 0;
-
-            const interval = setInterval(() => {
-                progress += Math.random() * 15;
-                if (progress > 100) progress = 100;
-                progressBar.style.width = progress + '%';
-
-                if (progress > messageIndex * 20) {
-                    bootText.textContent = messages[messageIndex] || messages[messages.length - 1];
-                    messageIndex++;
-                }
-
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        bootScreen.style.display = 'none';
-                    }, 500);
-                }
-            }, 200);
-        }
-
-        // 關機
-        function shutdown() {
-            const shutdownScreen = document.getElementById('shutdown-screen');
-            const progressBar = document.getElementById('shutdown-progress-bar');
-            shutdownScreen.style.display = 'flex';
-            let progress = 0;
-
-            const interval = setInterval(() => {
-                progress += Math.random() * 20;
-                if (progress > 100) progress = 100;
-                progressBar.style.width = progress + '%';
-
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1000);
-                }
-            }, 150);
-        }
-
-        // 藍屏
-        function triggerBSOD() {
-            const bsodScreen = document.getElementById('bsod-screen');
-            bsodScreen.style.display = 'flex';
-            setTimeout(() => {
-                bsodScreen.style.display = 'none';
-            }, 5000);
-        }
-
-        // 重放開機
-        function replayBoot() {
-            const bootScreen = document.getElementById('boot-screen');
-            bootScreen.style.display = 'flex';
-            startBoot();
-        }
-
         // 初始化
         document.addEventListener('DOMContentLoaded', () => {
-            startBoot();
             updateClock();
             setInterval(updateClock, 1000);
             populateFileList();
@@ -1072,6 +936,15 @@
         function browserGo() {
             const url = document.getElementById('browser-url').value;
             document.getElementById('browser-frame').src = url;
+        }
+
+        function launchMinecraft() {
+            const account = document.getElementById('mc-account').value.trim() || '玩家';
+            const version = document.getElementById('mc-version').value;
+            const status = document.getElementById('mc-status');
+            status.textContent = `已選擇 ${version}，${account}，嘗試開啟官方下載頁面...`;
+            status.style.color = '#a3e635';
+            window.open('https://www.minecraft.net/zh-hant/download', '_blank');
         }
 
         // 終端機功能
@@ -1237,6 +1110,11 @@
             changeTheme();
             closeWindow('win-settings');
         }
+
+        // 空函數保留用於相容性
+        function shutdown() {}
+        function triggerBSOD() {}
+        function replayBoot() {}
     </script>
 </body>
 </html>
