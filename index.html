@@ -108,20 +108,77 @@
 
         /* 最大化視窗 */
         .maximized {
-            top: 32px !important; left: 0 !important; width: 100vw !important; height: calc(100vh - 32px) !important;
+            top: 32px !important; left: 0 !important; width: 100vw !important; height: calc(100vh - 32px - 48px) !important;
             border-radius: 0 !important;
         }
+
+        /* 任務欄 */
+        .taskbar {
+            position: fixed; bottom: 0; left: 0; right: 0; height: 48px;
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(20px);
+            display: flex; align-items: center; padding: 0 15px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            z-index: 10000;
+        }
+
+        .taskbar-item {
+            width: 40px; height: 40px; margin: 0 4px;
+            background: rgba(255,255,255,0.1); border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.2s;
+            font-size: 18px;
+        }
+        .taskbar-item:hover { background: rgba(255,255,255,0.2); }
+        .taskbar-item.active { background: rgba(59, 130, 246, 0.3); }
+
+        .start-button {
+            width: 40px; height: 40px; background: rgba(59, 130, 246, 0.8);
+            border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.2s; margin-right: 10px;
+        }
+        .start-button:hover { background: rgba(59, 130, 246, 1); }
+
+        /* 開始選單 */
+        .start-menu {
+            position: fixed; bottom: 58px; left: 15px; width: 300px;
+            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+            padding: 20px; display: none; z-index: 10001;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .start-menu-item {
+            display: flex; align-items: center; padding: 12px;
+            border-radius: 8px; cursor: pointer; transition: 0.2s;
+            margin-bottom: 5px;
+        }
+        .start-menu-item:hover { background: rgba(255,255,255,0.1); }
+        .start-menu-item .icon { font-size: 24px; margin-right: 15px; }
+
+        /* 時鐘 */
+        .clock {
+            margin-left: auto; font-size: 12px; opacity: 0.8;
+        }
+
+        /* 更多桌面圖示 */
+        .desktop-icon {
+            position: absolute; text-align: center; cursor: pointer;
+            padding: 10px; border-radius: 15px; transition: 0.2s;
+        }
+        .desktop-icon:hover { background: rgba(255,255,255,0.1); }
+        .desktop-icon .icon-emoji { font-size: 48px; }
+        .desktop-icon .label { font-size: 12px; margin-top: 8px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="system-bar">
-        <div class="font-black italic text-blue-400">GEMINI OS</div>
+        <div class="font-black italic text-blue-400">GEMINI OS 1.0</div>
         <div class="ml-auto flex gap-4 items-center">
+            <div id="clock" class="clock">00:00</div>
             <button onclick="triggerBSOD()" class="text-[10px] opacity-40 uppercase tracking-widest hover:opacity-100 transition">BSOD</button>
             <button onclick="replayBoot()" class="text-[10px] opacity-40 uppercase tracking-widest hover:opacity-100 transition">Replay</button>
             <button onclick="shutdown()" class="text-[10px] opacity-40 uppercase tracking-widest hover:opacity-100 transition">Shutdown</button>
-            <div class="text-[10px] opacity-40 uppercase tracking-widest">Neural Window Engine v4.0</div>
         </div>
     </div>
 
@@ -154,14 +211,283 @@
     </div>
 
     <!-- 桌面圖示 -->
-    <div class="icon top-12 left-6" onclick="openWindow('win-earth')">
-        <div class="text-3xl">🌍</div>
-        <div class="text-[10px] mt-2 font-bold uppercase">Earth</div>
+    <div class="desktop-icon top-12 left-6" onclick="openWindow('win-earth')">
+        <div class="icon-emoji">🌍</div>
+        <div class="label">Earth Station</div>
     </div>
 
-    <div class="icon top-36 left-6" onclick="openWindow('win-media')">
-        <div class="text-3xl">📺</div>
-        <div class="text-[10px] mt-2 font-bold uppercase">Media</div>
+    <div class="desktop-icon top-36 left-6" onclick="openWindow('win-media')">
+        <div class="icon-emoji">📺</div>
+        <div class="label">Media Player</div>
+    </div>
+
+    <div class="desktop-icon top-60 left-6" onclick="openWindow('win-browser')">
+        <div class="icon-emoji">🌐</div>
+        <div class="label">Web Browser</div>
+    </div>
+
+    <div class="desktop-icon top-84 left-6" onclick="openWindow('win-terminal')">
+        <div class="icon-emoji">💻</div>
+        <div class="label">Terminal</div>
+    </div>
+
+    <div class="desktop-icon top-108 left-6" onclick="openWindow('win-files')">
+        <div class="icon-emoji">📁</div>
+        <div class="label">File Manager</div>
+    </div>
+
+    <div class="desktop-icon top-132 left-6" onclick="openWindow('win-settings')">
+        <div class="icon-emoji">⚙️</div>
+        <div class="label">Settings</div>
+    </div>
+
+    <div class="desktop-icon top-156 left-6" onclick="openWindow('win-vscode')">
+        <div class="icon-emoji">📝</div>
+        <div class="label">VS Code Web</div>
+    </div>
+
+    <div class="desktop-icon top-180 left-6" onclick="openWindow('win-appstore')">
+        <div class="icon-emoji">🛒</div>
+        <div class="label">Play Store</div>
+    </div>
+
+    <div class="desktop-icon top-180 left-6" onclick="openWindow('win-appstore')">
+        <div class="icon-emoji">🛒</div>
+        <div class="label">Play Store</div>
+    </div>
+
+    <!-- 任務欄 -->
+    <div class="taskbar">
+        <div class="start-button" onclick="toggleStartMenu()">🚀</div>
+        <div id="taskbar-items"></div>
+    </div>
+
+    <!-- 開始選單 -->
+    <div id="start-menu" class="start-menu">
+        <div class="start-menu-item" onclick="openWindow('win-browser')">
+            <div class="icon">🌐</div>
+            <div>Web Browser</div>
+        </div>
+        <div class="start-menu-item" onclick="openWindow('win-terminal')">
+            <div class="icon">💻</div>
+            <div>Terminal</div>
+        </div>
+        <div class="start-menu-item" onclick="openWindow('win-files')">
+            <div class="icon">📁</div>
+            <div>File Manager</div>
+        </div>
+        <div class="start-menu-item" onclick="openWindow('win-settings')">
+            <div class="icon">⚙️</div>
+            <div>Settings</div>
+        </div>
+        <div class="start-menu-item" onclick="openWindow('win-vscode')">
+            <div class="icon">📝</div>
+            <div>VS Code Web</div>
+        </div>
+        <div class="start-menu-item" onclick="openWindow('win-appstore')">
+            <div class="icon">🛒</div>
+            <div>Play Store</div>
+        </div>
+            <!-- Play Store / App Store -->
+            <div id="win-appstore" class="window w-[600px] h-[500px]" style="top: 180px; left: 300px; z-index: 130; display: none;">
+                <div class="window-header">
+                    <div class="flex gap-2">
+                        <div class="dot bg-red-500/50" onclick="closeWindow('win-appstore')"></div>
+                        <div class="dot bg-yellow-500/50" onclick="minimizeWindow('win-appstore')"></div>
+                        <div class="dot bg-green-500/50" onclick="maximizeWindow('win-appstore')"></div>
+                    </div>
+                    <span class="text-[9px] font-bold opacity-40 tracking-widest uppercase">Play Store</span>
+                </div>
+                <div class="window-content" style="overflow-y:auto;">
+                    <div style="padding: 20px;">
+                        <h3 style="margin-bottom: 15px;">App Store (Play Store)</h3>
+                        <div id="appstore-list"></div>
+                        <hr style="margin: 20px 0;">
+                        <h4>自訂安裝</h4>
+                        <input id="custom-app-name" type="text" placeholder="App 名稱" style="padding:4px; margin-right:4px;">
+                        <input id="custom-app-url" type="text" placeholder="App 網址 (https://...)" style="padding:4px; margin-right:4px; width:220px;">
+                        <button onclick="installCustomApp()" style="padding:4px 12px; background:#3b82f6; color:#fff; border:none; border-radius:4px;">安裝</button>
+                        <div id="custom-app-msg" style="font-size:12px; color:#22c55e; margin-top:8px;"></div>
+                    </div>
+                </div>
+                <div class="resize-handle"></div>
+            </div>
+            <script>
+            // App Store 內建 app 資料
+            const appStoreApps = [
+                { id: 'calc', name: '計算機', icon: '🧮', url: 'https://www.desmos.com/scientific', desc: '科學計算機' },
+                { id: 'notepad', name: '記事本', icon: '📝', url: 'https://anotepad.com/', desc: '雲端記事本' },
+                { id: 'weather', name: '天氣', icon: '🌦️', url: 'https://www.msn.com/zh-tw/weather', desc: '即時天氣查詢' },
+                { id: 'todo', name: '待辦清單', icon: '✅', url: 'https://todo.microsoft.com/', desc: '微軟 To Do' },
+                { id: 'github', name: 'GitHub', icon: '🐱', url: 'https://github.com/', desc: '程式社群平台' },
+                { id: 'yt', name: 'YouTube', icon: '📺', url: 'https://www.youtube.com/', desc: '影音平台' }
+            ];
+
+            // 已安裝 app 狀態（localStorage 可擴充）
+            let userApps = JSON.parse(localStorage.getItem('gemini_user_apps') || '[]');
+
+            function saveUserApps() {
+                localStorage.setItem('gemini_user_apps', JSON.stringify(userApps));
+            }
+
+            function renderAppStore() {
+                const list = document.getElementById('appstore-list');
+                if (!list) return;
+                list.innerHTML = '';
+                appStoreApps.forEach(app => {
+                    const installed = userApps.find(a => a.id === app.id);
+                    const div = document.createElement('div');
+                    div.style.cssText = 'display:flex;align-items:center;gap:12px;margin-bottom:10px;';
+                    div.innerHTML = `
+                        <span style="font-size:28px;">${app.icon}</span>
+                        <span style="flex:1;">${app.name}<br><span style='font-size:12px;opacity:0.7;'>${app.desc}</span></span>
+                        <button onclick="${installed ? `openWindow('app-${app.id}')` : `installApp('${app.id}')`}" style="padding:4px 12px;background:${installed ? '#22c55e' : '#3b82f6'};color:#fff;border:none;border-radius:4px;">${installed ? '開啟' : '安裝'}</button>
+                        ${installed ? `<button onclick="uninstallApp('${app.id}')" style='padding:4px 8px;background:#ef4444;color:#fff;border:none;border-radius:4px;margin-left:4px;'>移除</button>` : ''}
+                    `;
+                    list.appendChild(div);
+                });
+            }
+
+            function installApp(id) {
+                const app = appStoreApps.find(a => a.id === id);
+                if (!app) return;
+                userApps.push(app);
+                saveUserApps();
+                createAppWindow(app);
+                renderAppStore();
+                updateDesktopAndMenu();
+            }
+
+            function uninstallApp(id) {
+                userApps = userApps.filter(a => a.id !== id);
+                saveUserApps();
+                const win = document.getElementById('app-' + id);
+                if (win) win.remove();
+                renderAppStore();
+                updateDesktopAndMenu();
+            }
+
+            function installCustomApp() {
+                const name = document.getElementById('custom-app-name').value.trim();
+                const url = document.getElementById('custom-app-url').value.trim();
+                if (!name || !url) return;
+                const id = 'custom_' + Date.now();
+                const app = { id, name, icon: '🌐', url, desc: '自訂 App' };
+                userApps.push(app);
+                saveUserApps();
+                createAppWindow(app);
+                renderAppStore();
+                updateDesktopAndMenu();
+                document.getElementById('custom-app-msg').textContent = '安裝成功！';
+                setTimeout(()=>{document.getElementById('custom-app-msg').textContent='';},2000);
+            }
+
+            function createAppWindow(app) {
+                if (document.getElementById('app-' + app.id)) return;
+                const win = document.createElement('div');
+                win.id = 'app-' + app.id;
+                win.className = 'window w-[700px] h-[500px]';
+                win.style = 'top: 220px; left: 320px; z-index: 150; display: none;';
+                win.innerHTML = `
+                    <div class="window-header">
+                        <div class="flex gap-2">
+                            <div class="dot bg-red-500/50" onclick="closeWindow('app-${app.id}')"></div>
+                            <div class="dot bg-yellow-500/50" onclick="minimizeWindow('app-${app.id}')"></div>
+                            <div class="dot bg-green-500/50" onclick="maximizeWindow('app-${app.id}')"></div>
+                        </div>
+                        <span class="text-[9px] font-bold opacity-40 tracking-widest uppercase">${app.name}</span>
+                    </div>
+                    <div class="window-content">
+                        <div class="interaction-overlay"></div>
+                        <iframe width="100%" height="100%" src="${app.url}" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <div class="resize-handle"></div>
+                `;
+                document.body.appendChild(win);
+            }
+
+            function updateDesktopAndMenu() {
+                // 桌面
+                let base = document.querySelector('.desktop-icon.top-180.left-6');
+                if (!base) return;
+                // 移除舊的
+                document.querySelectorAll('.desktop-icon.user-app').forEach(e=>e.remove());
+                // 新增
+                userApps.forEach((app,i) => {
+                    const icon = document.createElement('div');
+                    icon.className = `desktop-icon user-app`;
+                    icon.style = `top: ${210 + i*24}px; left: 6px; position: absolute;`;
+                    icon.onclick = ()=>openWindow('app-'+app.id);
+                    icon.innerHTML = `<div class='icon-emoji'>${app.icon}</div><div class='label'>${app.name}</div>`;
+                    document.body.appendChild(icon);
+                });
+                // 開始選單
+                const menu = document.getElementById('start-menu');
+                if (!menu) return;
+                document.querySelectorAll('.start-menu-item.user-app').forEach(e=>e.remove());
+                userApps.forEach(app => {
+                    const item = document.createElement('div');
+                    item.className = 'start-menu-item user-app';
+                    item.onclick = ()=>openWindow('app-'+app.id);
+                    item.innerHTML = `<div class='icon'>${app.icon}</div><div>${app.name}</div>`;
+                    menu.insertBefore(item, menu.lastElementChild);
+                });
+            }
+
+            // 初始化 App Store
+            document.addEventListener('DOMContentLoaded', () => {
+                renderAppStore();
+                userApps.forEach(createAppWindow);
+                updateDesktopAndMenu();
+            });
+            </script>
+        <div class="start-menu-item" onclick="openWindow('win-appstore')">
+            <div class="icon">🛒</div>
+            <div>Play Store</div>
+        </div>
+            <!-- Play Store / App Store 視窗 -->
+            <div id="win-appstore" class="window w-[600px] h-[500px]" style="top: 180px; left: 300px; z-index: 130; display: none;">
+                <div class="window-header">
+                    <div class="flex gap-2">
+                        <div class="dot bg-red-500/50" onclick="closeWindow('win-appstore')"></div>
+                        <div class="dot bg-yellow-500/50" onclick="minimizeWindow('win-appstore')"></div>
+                        <div class="dot bg-green-500/50" onclick="maximizeWindow('win-appstore')"></div>
+                    </div>
+                    <span class="text-[9px] font-bold opacity-40 tracking-widest uppercase">Play Store</span>
+                </div>
+                <div class="window-content" style="overflow-y:auto;">
+                    <div style="padding: 20px;">
+                        <h3 style="font-size: 20px; margin-bottom: 15px;">App Store / Play Store</h3>
+                        <div id="appstore-list"></div>
+                        <hr style="margin: 20px 0;">
+                        <h4>安裝自訂 Web App</h4>
+                        <input id="custom-app-name" type="text" placeholder="App 名稱" style="padding: 4px; margin-right: 8px;">
+                        <input id="custom-app-url" type="text" placeholder="App 網址 (https://...)" style="padding: 4px; margin-right: 8px; width: 220px;">
+                        <button onclick="installCustomApp()" style="padding: 4px 12px; background: #3b82f6; color: #fff; border: none; border-radius: 4px;">安裝</button>
+                    </div>
+                </div>
+                <div class="resize-handle"></div>
+            </div>
+        <div class="start-menu-item" onclick="shutdown()">
+            <div class="icon">🔌</div>
+            <div>Shutdown</div>
+        </div>
+        <!-- VS Code Web 內建應用 -->
+        <div id="win-vscode" class="window w-[900px] h-[600px]" style="top: 120px; left: 180px; z-index: 120; display: none;">
+            <div class="window-header">
+                <div class="flex gap-2">
+                    <div class="dot bg-red-500/50" onclick="closeWindow('win-vscode')"></div>
+                    <div class="dot bg-yellow-500/50" onclick="minimizeWindow('win-vscode')"></div>
+                    <div class="dot bg-green-500/50" onclick="maximizeWindow('win-vscode')"></div>
+                </div>
+                <span class="text-[9px] font-bold opacity-40 tracking-widest uppercase">VS Code Web</span>
+            </div>
+            <div class="window-content">
+                <div class="interaction-overlay"></div>
+                <iframe id="vscode-frame" width="100%" height="100%" src="https://vscode.dev/" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="resize-handle"></div>
+        </div>
     </div>
 
     <!-- 🌍 地球觀察站 -->
@@ -181,25 +507,244 @@
         <div class="resize-handle"></div>
     </div>
 
-    <!-- 📺 媒體中心 -->
-    <div id="win-media" class="window w-[500px] h-[350px]" style="top: 200px; left: 400px; z-index: 101;">
+    <!-- 🌐 網頁瀏覽器 -->
+    <div id="win-browser" class="window w-[800px] h-[500px]" style="top: 150px; left: 250px; z-index: 102; display: none;">
         <div class="window-header">
             <div class="flex gap-2">
-                <div class="dot bg-red-500/50" onclick="closeWindow('win-media')"></div>
-                <div class="dot bg-yellow-500/50" onclick="minimizeWindow('win-media')"></div>
-                <div class="dot bg-green-500/50" onclick="maximizeWindow('win-media')"></div>
+                <div class="dot bg-red-500/50" onclick="closeWindow('win-browser')"></div>
+                <div class="dot bg-yellow-500/50" onclick="minimizeWindow('win-browser')"></div>
+                <div class="dot bg-green-500/50" onclick="maximizeWindow('win-browser')"></div>
             </div>
-            <span class="text-[9px] font-bold opacity-40 tracking-widest uppercase">Media Player</span>
+            <span class="text-[9px] font-bold opacity-40 tracking-widest uppercase">Gemini Browser</span>
         </div>
         <div class="window-content">
             <div class="interaction-overlay"></div>
-            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0"></iframe>
+            <div style="height: 40px; background: rgba(0,0,0,0.3); padding: 8px; display: flex; gap: 8px;">
+                <button onclick="browserBack()" style="padding: 4px 8px; background: rgba(255,255,255,0.1); border-radius: 4px;">←</button>
+                <button onclick="browserForward()" style="padding: 4px 8px; background: rgba(255,255,255,0.1); border-radius: 4px;">→</button>
+                <input id="browser-url" type="text" value="https://www.google.com" style="flex: 1; padding: 4px; background: rgba(255,255,255,0.1); border: none; border-radius: 4px; color: white;">
+                <button onclick="browserGo()" style="padding: 4px 8px; background: rgba(59,130,246,0.8); border-radius: 4px;">Go</button>
+            </div>
+            <iframe id="browser-frame" width="100%" height="calc(100% - 40px)" src="https://www.google.com" frameborder="0"></iframe>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <!-- 💻 終端機 -->
+    <div id="win-terminal" class="window w-[600px] h-[400px]" style="top: 200px; left: 350px; z-index: 103; display: none;">
+        <div class="window-header">
+            <div class="flex gap-2">
+                <div class="dot bg-red-500/50" onclick="closeWindow('win-terminal')"></div>
+                <div class="dot bg-yellow-500/50" onclick="minimizeWindow('win-terminal')"></div>
+                <div class="dot bg-green-500/50" onclick="maximizeWindow('win-terminal')"></div>
+            </div>
+            <span class="text-[9px] font-bold opacity-40 tracking-widest uppercase">Terminal</span>
+        </div>
+        <div class="window-content">
+            <div class="interaction-overlay"></div>
+            <div id="terminal-output" style="padding: 10px; font-family: monospace; background: #000; color: #0f0; height: 100%; overflow-y: auto;">
+                GeminiOS Terminal v1.0<br>
+                Type 'help' for commands.<br>
+                <span id="terminal-prompt">user@geminios:~$ </span><span id="terminal-input" contenteditable="true" style="outline: none;"></span>
+            </div>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <!-- 📁 檔案管理器 -->
+    <div id="win-files" class="window w-[700px] h-[450px]" style="top: 180px; left: 300px; z-index: 104; display: none;">
+        <div class="window-header">
+            <div class="flex gap-2">
+                <div class="dot bg-red-500/50" onclick="closeWindow('win-files')"></div>
+                <div class="dot bg-yellow-500/50" onclick="minimizeWindow('win-files')"></div>
+                <div class="dot bg-green-500/50" onclick="maximizeWindow('win-files')"></div>
+            </div>
+            <span class="text-[9px] font-bold opacity-40 tracking-widest uppercase">File Manager</span>
+        </div>
+        <div class="window-content">
+            <div class="interaction-overlay"></div>
+            <div style="padding: 10px;">
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <button onclick="filesBack()" style="padding: 4px 8px; background: rgba(255,255,255,0.1); border-radius: 4px;">←</button>
+                    <span id="current-path">/home/user</span>
+                </div>
+                <div id="file-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px;">
+                    <!-- Files will be populated by JS -->
+                </div>
+            </div>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <!-- ⚙️ 設定 -->
+    <div id="win-settings" class="window w-[500px] h-[400px]" style="top: 220px; left: 400px; z-index: 105; display: none;">
+        <div class="window-header">
+            <div class="flex gap-2">
+                <div class="dot bg-red-500/50" onclick="closeWindow('win-settings')"></div>
+                <div class="dot bg-yellow-500/50" onclick="minimizeWindow('win-settings')"></div>
+                <div class="dot bg-green-500/50" onclick="maximizeWindow('win-settings')"></div>
+            </div>
+            <span class="text-[9px] font-bold opacity-40 tracking-widest uppercase">Settings</span>
+        </div>
+        <div class="window-content">
+            <div class="interaction-overlay"></div>
+            <div style="padding: 20px;">
+                <h3 style="margin-bottom: 15px;">System Settings</h3>
+                <div style="margin-bottom: 15px;">
+                    <label>Wallpaper:</label><br>
+                    <select id="wallpaper-select" onchange="changeWallpaper()">
+                        <option value="default">Default Dark</option>
+                        <option value="blue">Blue Gradient</option>
+                        <option value="stars">Starry Night</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label>Theme:</label><br>
+                    <select id="theme-select" onchange="changeTheme()">
+                        <option value="dark">Dark</option>
+                        <option value="light">Light</option>
+                    </select>
+                </div>
+                <button onclick="applySettings()" style="padding: 8px 16px; background: #3b82f6; border: none; border-radius: 4px; color: white;">Apply</button>
+            </div>
         </div>
         <div class="resize-handle"></div>
     </div>
 
     <script>
         let highestZ = 1000;
+
+        // App Store 內建 app 資料
+        const appStoreApps = [
+            { id: 'calc', name: '計算機', icon: '🧮', url: 'https://www.desmos.com/scientific', desc: '科學計算機' },
+            { id: 'notepad', name: '記事本', icon: '📝', url: 'https://anotepad.com/', desc: '雲端記事本' },
+            { id: 'weather', name: '天氣', icon: '🌦️', url: 'https://www.accuweather.com/', desc: '即時天氣查詢' },
+            { id: 'todo', name: '待辦清單', icon: '✅', url: 'https://todo.microsoft.com/', desc: '微軟 To Do' },
+            { id: 'maps', name: 'Google 地圖', icon: '🌍', url: 'https://www.google.com/maps', desc: '地圖服務' },
+            { id: 'yt', name: 'YouTube', icon: '📺', url: 'https://www.youtube.com/', desc: '影音平台' },
+            { id: 'vscode', name: 'VS Code Web', icon: '📝', url: 'https://vscode.dev/', desc: '線上程式編輯器' }
+        ];
+
+        // 已安裝 app 狀態（localStorage）
+        let userApps = JSON.parse(localStorage.getItem('gemini_user_apps') || '[]');
+
+        function saveUserApps() {
+            localStorage.setItem('gemini_user_apps', JSON.stringify(userApps));
+        }
+
+        // 顯示 App Store 內容
+        function renderAppStore() {
+            const list = document.getElementById('appstore-list');
+            if (!list) return;
+            list.innerHTML = '';
+            appStoreApps.forEach(app => {
+                const installed = userApps.find(a => a.id === app.id);
+                const div = document.createElement('div');
+                div.style.cssText = 'display:flex;align-items:center;margin-bottom:12px;gap:12px;';
+                div.innerHTML = `<span style="font-size:28px;">${app.icon}</span><b>${app.name}</b><span style="opacity:.7;">${app.desc}</span>`;
+                const btn = document.createElement('button');
+                btn.textContent = installed ? '已安裝' : '安裝';
+                btn.disabled = !!installed;
+                btn.style.cssText = 'margin-left:auto;padding:4px 12px;border-radius:4px;background:#3b82f6;color:#fff;border:none;';
+                btn.onclick = () => installApp(app);
+                div.appendChild(btn);
+                list.appendChild(div);
+            });
+        }
+
+        // 安裝內建 app
+        function installApp(app) {
+            if (!userApps.find(a => a.id === app.id)) {
+                userApps.push(app);
+                saveUserApps();
+                renderAppStore();
+                renderUserApps();
+            }
+        }
+
+        // 安裝自訂 app
+        function installCustomApp() {
+            const name = document.getElementById('custom-app-name').value.trim();
+            const url = document.getElementById('custom-app-url').value.trim();
+            if (!name || !url) return alert('請輸入名稱與網址');
+            const id = 'custom_' + Date.now();
+            const icon = '🔗';
+            const app = { id, name, icon, url, desc: '自訂 App' };
+            userApps.push(app);
+            saveUserApps();
+            renderAppStore();
+            renderUserApps();
+        }
+
+        // 動態渲染已安裝 app 到桌面與開始選單
+        function renderUserApps() {
+            // 桌面
+            let base = 210;
+            document.querySelectorAll('.desktop-icon.user-app').forEach(e => e.remove());
+            userApps.forEach((app, i) => {
+                if (document.getElementById('desktop-app-' + app.id)) return;
+                const div = document.createElement('div');
+                div.className = 'desktop-icon user-app top-' + (base + i*24) + ' left-6';
+                div.id = 'desktop-app-' + app.id;
+                div.onclick = () => openUserApp(app.id);
+                div.innerHTML = `<div class="icon-emoji">${app.icon}</div><div class="label">${app.name}</div>`;
+                document.body.appendChild(div);
+            });
+            // 開始選單
+            document.querySelectorAll('.start-menu-item.user-app').forEach(e => e.remove());
+            const menu = document.getElementById('start-menu');
+            userApps.forEach(app => {
+                if (document.getElementById('menu-app-' + app.id)) return;
+                const div = document.createElement('div');
+                div.className = 'start-menu-item user-app';
+                div.id = 'menu-app-' + app.id;
+                div.onclick = () => openUserApp(app.id);
+                div.innerHTML = `<div class="icon">${app.icon}</div><div>${app.name}</div>`;
+                menu.insertBefore(div, menu.lastElementChild);
+            });
+        }
+
+        // 開啟已安裝 app
+        function openUserApp(id) {
+            const app = userApps.find(a => a.id === id);
+            if (!app) return;
+            let win = document.getElementById('win-userapp-' + id);
+            if (!win) {
+                win = document.createElement('div');
+                win.className = 'window w-[800px] h-[500px]';
+                win.id = 'win-userapp-' + id;
+                win.style = 'top: 120px; left: 180px; z-index: 150; position: absolute; display: flex;';
+                win.innerHTML = `
+                    <div class="window-header">
+                        <div class="flex gap-2">
+                            <div class="dot bg-red-500/50" onclick="closeUserApp('${id}')"></div>
+                            <div class="dot bg-yellow-500/50" onclick="minimizeWindow('win-userapp-${id}')"></div>
+                            <div class="dot bg-green-500/50" onclick="maximizeWindow('win-userapp-${id}')"></div>
+                        </div>
+                        <span class="text-[9px] font-bold opacity-40 tracking-widest uppercase">${app.name}</span>
+                    </div>
+                    <div class="window-content">
+                        <div class="interaction-overlay"></div>
+                        <iframe width="100%" height="100%" src="${app.url}" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <div class="resize-handle"></div>
+                `;
+                document.body.appendChild(win);
+            }
+            win.style.display = 'flex';
+            bringToFront(win);
+        }
+
+        function closeUserApp(id) {
+            const win = document.getElementById('win-userapp-' + id);
+            if (win) win.style.display = 'none';
+        }
+
+        // 初始化 App Store
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAppStore();
+            renderUserApps();
+        });
 
         function openWindow(id) {
             const win = document.getElementById(id);
@@ -214,6 +759,7 @@
         function bringToFront(win) {
             highestZ++;
             win.style.zIndex = highestZ;
+            updateTaskbar();
         }
 
         document.querySelectorAll('.window').forEach(win => {
@@ -393,7 +939,267 @@
         // 初始化
         document.addEventListener('DOMContentLoaded', () => {
             startBoot();
+            updateClock();
+            setInterval(updateClock, 1000);
+            populateFileList();
         });
+
+        // 時鐘
+        function updateClock() {
+            const now = new Date();
+            const time = now.toLocaleTimeString('zh-TW', { hour12: false });
+            document.getElementById('clock').textContent = time;
+        }
+
+        // 開始選單
+        function toggleStartMenu() {
+            const menu = document.getElementById('start-menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // 點擊其他地方關閉開始選單
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('start-menu');
+            const startBtn = document.querySelector('.start-button');
+            if (!menu.contains(e.target) && !startBtn.contains(e.target)) {
+                menu.style.display = 'none';
+            }
+        });
+
+        // 任務欄更新
+        function updateTaskbar() {
+            const taskbarItems = document.getElementById('taskbar-items');
+            taskbarItems.innerHTML = '';
+            
+            document.querySelectorAll('.window').forEach(win => {
+                if (win.style.display !== 'none' && !win.classList.contains('minimized')) {
+                    const item = document.createElement('div');
+                    item.className = 'taskbar-item';
+                    item.textContent = getWindowIcon(win.id);
+                    item.onclick = () => {
+                        if (win.style.display === 'none' || win.classList.contains('minimized')) {
+                            openWindow(win.id);
+                        } else {
+                            bringToFront(win);
+                        }
+                    };
+                    taskbarItems.appendChild(item);
+                }
+            });
+        }
+
+        function getWindowIcon(id) {
+            const icons = {
+                'win-earth': '🌍',
+                'win-media': '📺',
+                'win-browser': '🌐',
+                'win-terminal': '💻',
+                'win-files': '📁',
+                'win-settings': '⚙️'
+            };
+            return icons[id] || '🖼️';
+        }
+
+        // 修改 openWindow 來更新任務欄
+        const originalOpenWindow = openWindow;
+        openWindow = function(id) {
+            originalOpenWindow(id);
+            setTimeout(updateTaskbar, 100);
+        };
+
+        // 修改 closeWindow 來更新任務欄
+        const originalCloseWindow = closeWindow;
+        closeWindow = function(id) {
+            originalCloseWindow(id);
+            updateTaskbar();
+        };
+
+        // 修改 minimizeWindow 來更新任務欄
+        const originalMinimizeWindow = minimizeWindow;
+        minimizeWindow = function(id) {
+            originalMinimizeWindow(id);
+            updateTaskbar();
+        };
+
+        // 瀏覽器功能
+        function browserBack() {
+            const frame = document.getElementById('browser-frame');
+            frame.contentWindow.history.back();
+        }
+
+        function browserForward() {
+            const frame = document.getElementById('browser-frame');
+            frame.contentWindow.history.forward();
+        }
+
+        function browserGo() {
+            const url = document.getElementById('browser-url').value;
+            document.getElementById('browser-frame').src = url;
+        }
+
+        // 終端機功能
+        let terminalHistory = [];
+        let historyIndex = -1;
+
+        document.getElementById('terminal-input').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const command = e.target.textContent.trim();
+                executeCommand(command);
+                e.target.textContent = '';
+                terminalHistory.push(command);
+                historyIndex = terminalHistory.length;
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    e.target.textContent = terminalHistory[historyIndex];
+                }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (historyIndex < terminalHistory.length - 1) {
+                    historyIndex++;
+                    e.target.textContent = terminalHistory[historyIndex];
+                } else {
+                    historyIndex = terminalHistory.length;
+                    e.target.textContent = '';
+                }
+            }
+        });
+
+        function executeCommand(cmd) {
+            const output = document.getElementById('terminal-output');
+            const prompt = document.getElementById('terminal-prompt');
+            
+            output.innerHTML += '<br>' + cmd + '<br>';
+            
+            const args = cmd.split(' ');
+            const command = args[0].toLowerCase();
+            
+            switch(command) {
+                case 'help':
+                    output.innerHTML += 'Available commands: help, clear, ls, pwd, echo, date, whoami<br>';
+                    break;
+                case 'clear':
+                    output.innerHTML = 'GeminiOS Terminal v1.0<br>Type \'help\' for commands.<br>';
+                    break;
+                case 'ls':
+                    output.innerHTML += 'Documents  Downloads  Pictures  Music  Videos<br>';
+                    break;
+                case 'pwd':
+                    output.innerHTML += '/home/user<br>';
+                    break;
+                case 'echo':
+                    output.innerHTML += args.slice(1).join(' ') + '<br>';
+                    break;
+                case 'date':
+                    output.innerHTML += new Date().toString() + '<br>';
+                    break;
+                case 'whoami':
+                    output.innerHTML += 'user<br>';
+                    break;
+                default:
+                    output.innerHTML += `Command not found: ${command}<br>`;
+            }
+            
+            output.innerHTML += prompt.outerHTML + '<span id="terminal-input" contenteditable="true" style="outline: none;"></span>';
+            output.scrollTop = output.scrollHeight;
+            document.getElementById('terminal-input').focus();
+        }
+
+        // 檔案管理器
+        let currentPath = '/home/user';
+
+        function populateFileList() {
+            const fileList = document.getElementById('file-list');
+            const files = [
+                { name: 'Documents', type: 'folder', icon: '📁' },
+                { name: 'Downloads', type: 'folder', icon: '📁' },
+                { name: 'Pictures', type: 'folder', icon: '🖼️' },
+                { name: 'Music', type: 'folder', icon: '🎵' },
+                { name: 'Videos', type: 'folder', icon: '🎬' },
+                { name: 'readme.txt', type: 'file', icon: '📄' },
+                { name: 'config.json', type: 'file', icon: '⚙️' }
+            ];
+            
+            fileList.innerHTML = '';
+            files.forEach(file => {
+                const item = document.createElement('div');
+                item.className = 'file-item';
+                item.style.cssText = 'display: flex; flex-direction: column; align-items: center; padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.2s;';
+                item.innerHTML = `
+                    <div style="font-size: 32px;">${file.icon}</div>
+                    <div style="font-size: 12px; margin-top: 5px;">${file.name}</div>
+                `;
+                item.onmouseover = () => item.style.background = 'rgba(255,255,255,0.1)';
+                item.onmouseout = () => item.style.background = 'transparent';
+                item.onclick = () => {
+                    if (file.type === 'folder') {
+                        currentPath += '/' + file.name;
+                        document.getElementById('current-path').textContent = currentPath;
+                        populateFileList();
+                    }
+                };
+                fileList.appendChild(item);
+            });
+        }
+
+        function filesBack() {
+            const parts = currentPath.split('/');
+            if (parts.length > 2) {
+                parts.pop();
+                currentPath = parts.join('/');
+                document.getElementById('current-path').textContent = currentPath;
+                populateFileList();
+            }
+        }
+
+        // 設定
+        function changeWallpaper() {
+            const select = document.getElementById('wallpaper-select');
+            const body = document.body;
+            
+            body.style.background = '';
+            body.style.backgroundColor = 'var(--bg-dark)';
+            
+            switch(select.value) {
+                case 'blue':
+                    body.style.background = 'linear-gradient(135deg, #1e3a8a 0%, #020617 100%)';
+                    break;
+                case 'stars':
+                    body.style.background = 'radial-gradient(circle at 50% 50%, #0f172a 0%, #020617 100%), url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.1\'%3E%3Ccircle cx=\'30\' cy=\'30\' r=\'1\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")';
+                    break;
+                default:
+                    body.style.background = 'radial-gradient(circle at 50% 50%, #0f172a 0%, #020617 100%)';
+            }
+        }
+
+        function changeTheme() {
+            const select = document.getElementById('theme-select');
+            const root = document.documentElement;
+            
+            if (select.value === 'light') {
+                root.style.setProperty('--bg-dark', '#f8fafc');
+                document.body.style.color = '#020617';
+                document.querySelectorAll('.window').forEach(win => {
+                    win.style.background = 'rgba(248, 250, 252, 0.9)';
+                    win.style.borderColor = 'rgba(0,0,0,0.1)';
+                });
+            } else {
+                root.style.setProperty('--bg-dark', '#020617');
+                document.body.style.color = '#f8fafc';
+                document.querySelectorAll('.window').forEach(win => {
+                    win.style.background = 'rgba(15, 23, 42, 0.7)';
+                    win.style.borderColor = 'rgba(255,255,255,0.1)';
+                });
+            }
+        }
+
+        function applySettings() {
+            changeWallpaper();
+            changeTheme();
+            closeWindow('win-settings');
+        }
     </script>
 </body>
 </html>
